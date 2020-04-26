@@ -34,6 +34,11 @@ provider:
         - { "Fn::GetAtt": ["PuppySearch", "DomainArn"] }
         - { "Fn::Join": ["", ["Fn::GetAtt": ["PuppySearch", "DomainArn"], "/*"]] }
 
+plugins:
+  - serverless-localstack
+
+custom: {}
+
 package:
   exclude:
     - ./**
@@ -103,4 +108,3 @@ resources:
         #       Resource: "*"
         AdvancedOptions:
           rest.action.multi.allow_explicit_index: "true"
-

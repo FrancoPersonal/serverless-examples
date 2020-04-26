@@ -25,3 +25,6 @@ layers:
 
 custom:
   bucket: ${env:BUCKET, 'ffmpeg-layer-gif-maker'}
+
+plugins:
+  - serverless-localstack

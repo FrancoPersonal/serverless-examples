@@ -1,12 +1,26 @@
 language: node_js
-sudo: false
+sudo: true
 node_js:
   - 6
 
 install:
-  - npm install
+  - export DEBIAN_FRONTEND=noninteractive
+  - echo /home/travis/.nvm/versions/node/v6*/lib/node_modules
+  - sudo add-apt-repository -y ppa:longsleep/golang-backports; sudo apt update -q
+  - sudo apt install -y -qq golang-go
+  - go version
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - export PATH=$PATH:$GOPATH/bin
+  - mkdir -p $GOPATH/src/github.com/serverless
+  - ln -s `pwd` $GOPATH/src/github.com/serverless/examples
 
 script:
-  - npm run docs
-  - npm run validate
-  - ./check-if-readme-is-up-to-date.sh
+  - cd $GOPATH/src/github.com/serverless/examples
+  - make install
+  - export NODE_PATH=$NODE_PATH:`echo /home/travis/.nvm/versions/node/v6*/lib/node_modules`
+  - ls -la /home/travis/.nvm/versions/node/v6*/lib/node_modules
+  - make start
+  - make test-all
+
+notifications:
+  email: false
